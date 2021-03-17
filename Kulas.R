@@ -21,7 +21,20 @@ use <- data[complete.cases(data), ]                          # Problem with NAs 
 
 ## Too many predictors, need to trim down
 
-psych::describe(use)
+# psych::describe(use)
 use2 <- use[,-c(1,3,24)]
-fit.svm <- train(POSTSEASON ~ ., data=use2, method="lm", metric=metric, trControl=control)
-summary(fit.svm)
+
+fit.lm <- train(POSTSEASON ~ ., data=use2, method="lm", metric=metric, trControl=control)
+fit.wm <- train(POSTSEASON ~ ., data=use2, method="WM", metric=metric, trControl=control)
+# fit.evtree <- train(POSTSEASON ~ ., data=use2, method="evtree", metric=metric, trControl=control)
+
+results <- resamples(list(lm=fit.lm, wm=fit.wm))
+summary(results)
+dotplot(results)
+
+
+validate <- read.csv("cbb21.csv")
+validate <- validate[,-c(1,3)]
+
+predictions <- predict(fit.lm, validate)
+write.csv(predictions, "winner.csv")
