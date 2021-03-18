@@ -48,14 +48,15 @@ fit.rf <- train(POSTSEASON~., data=use2, method="rf", metric=metric, trControl=c
 results <- resamples(list(cart=fit.cart, knn=fit.knn, svm=fit.svm, rf=fit.rf, lm=fit.lm, wm=fit.wm))
 summary(results)
 dotplot(results)
-results <- resamples(list(lm=fit.lm, wm=fit.wm))
-summary(results)
-dotplot(results)
+
+#results <- resamples(list(lm=fit.lm, wm=fit.wm))
+#summary(results)
+#dotplot(results)
 
 
 validate <- read.csv("cbb21.csv")
-validate <- validate[,-c(1,3)]
+validate <- validate[,-c(1,2,3)]
 
-predictions <- predict(fit.wm, validate)
+predictions <- predict(fit.lm, validate)
 write.csv(predictions, "winner.csv")
 
