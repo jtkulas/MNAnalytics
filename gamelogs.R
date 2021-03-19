@@ -168,3 +168,4 @@ validate <- data.frame(lapply(finally3, function(x) as.numeric(as.character(x)))
 predictions <- predict(fit.lm, validate)
 write.csv(predictions, "winnerR1.csv")
 
+
