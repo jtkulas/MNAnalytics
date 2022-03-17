@@ -54,7 +54,7 @@ dotplot(results)
 #dotplot(results)
 
 
-validate <- read.csv("cbb21.csv")
+validate <- read.csv("cbb22.csv")
 validate <- validate[,-c(1,2,3)]
 
 predictions <- predict(fit.lm, validate)
