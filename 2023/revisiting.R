@@ -59,16 +59,50 @@ control <- trainControl(method="cv", number=10,verboseIter = TRUE)
 metric <- "RMSE"
 
 use2 <- use[,-c(1,2,3,4,21)]  # index, conf, year
+use3 <- use[,-c(1,2,21)]
+
+##########################################
+##########################################
+##########################################
+##########################################
 
 set.seed(32)
 fit.lm <- train(POSTSEASON ~ ., data=use2, method="lm", metric=metric, trControl=control, preProcess = "knnImpute")
-
 set.seed(56)
+fit.wm <- train(POSTSEASON ~ ., data=use2, method="WM", metric=metric, trControl=control, preProcess = "knnImpute")
+# fit.evtree <- train(POSTSEASON ~ ., data=use2, method="evtree", metric=metric, trControl=control)
+
+# CART
+set.seed(90)
+fit.cart <- train(POSTSEASON~., data=use2, method="rpart", metric=metric, trControl=control, preProcess = "knnImpute")
+# kNN
+set.seed(12)
+fit.knn <- train(POSTSEASON~., data=use2, method="knn", metric=metric, trControl=control, preProcess = "knnImpute")
+# c) advanced algorithms
+# SVM
+set.seed(48)
 fit.svm <- train(POSTSEASON~., data=use2, method="svmRadial", metric=metric, trControl=control, preProcess = "knnImpute")
+# Random Forest
+set.seed(87)
+fit.rf <- train(POSTSEASON~., data=use2, method="rf", metric=metric, trControl=control, preProcess = "knnImpute")
 
-########################
-########################
 
-results <- resamples(list(lm=fit.lm, svm=fit.svm))
+# summarize accuracy of models
+results <- resamples(list(cart=fit.cart, knn=fit.knn, svm=fit.svm, rf=fit.rf, lm=fit.lm, wm=fit.wm))
 summary(results)
 dotplot(results)
+
+
+
+validate <- read.csv("2023//2023.csv")
+validate <- na.omit(validate)
+validate <- validate[,-c(1,2,3,20)]
+
+predictions <- predict(fit.lm, validate)
+write.csv(predictions, "2023//winner.csv")
+
+teams <- read.csv("2023//2023.csv")
+teams <- na.omit(teams)
+teams <- teams[,2:4]
+write.csv(teams, "2023//teams.csv")
+
