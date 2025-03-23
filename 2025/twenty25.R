@@ -1,4 +1,8 @@
 ## salvaged from 2023//twenty24.R  (3/19/25)
+######
+######
+######
+###### One bracket had NO predicted top-10 teams. This bracket ended up having many upsets
 
 ## toRvik has been depreciated - need to use `cbbdata`
 
