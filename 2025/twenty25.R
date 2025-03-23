@@ -4,13 +4,12 @@
 
 library(cbbdata)
 cbbdata::cbd_login(username='John Kulas', password='Haskins94')
-write.csv(cbd_torvik_ratings(2025), "2025//2025.csv")  
+write.csv(cbd_torvik_ratings(2025), "2025//2025.csv")  ## current year at bottom of file
 
 
 
-
-old <- read.csv("2023//2015_2022_scored.csv.csv")   ## had tourney results
-new <- read.csv("2023//2023 - 2023.csv.csv", na.strings=c("","NA"))  ## also tourney results
+old <- read.csv("2023//2015_2022_scored.csv.csv")                     ## had tourney results
+new <- read.csv("2023//2023 - 2023.csv.csv", na.strings=c("","NA"))   ## also tourney results
 new24 <- read.csv("2025//2024.csv.csv", na.strings=c("","NA"))
 names(new24)[3] <- "X.1" 
 ## Scoring 2024 by hand (3/19/25)
@@ -22,12 +21,12 @@ use <- na.omit(temp)
 names(use)[names(use) == "final"] <- "POSTSEASON"
 
 use$POSTSEASON[use$POSTSEASON=="Champions"] <- 6     # Changing qualitative outcome to numeric (how many rounds won)
-use$POSTSEASON[use$POSTSEASON=="2ND"] <- 5     ## different weights this year 2025
-use$POSTSEASON[use$POSTSEASON=="F4"] <- 4 
-use$POSTSEASON[use$POSTSEASON=="E8"] <- 3
-use$POSTSEASON[use$POSTSEASON=="S16"] <- 2
-use$POSTSEASON[use$POSTSEASON=="R32"] <- 1
-use$POSTSEASON[use$POSTSEASON=="R64"] <- -1    ## change to -1
+use$POSTSEASON[use$POSTSEASON=="2ND"]       <- 5     
+use$POSTSEASON[use$POSTSEASON=="F4"]        <- 4 
+use$POSTSEASON[use$POSTSEASON=="E8"]        <- 3
+use$POSTSEASON[use$POSTSEASON=="S16"]       <- 2
+use$POSTSEASON[use$POSTSEASON=="R32"]       <- 1
+use$POSTSEASON[use$POSTSEASON=="R64"]       <- -1    ## change to -1 (2025)
 
 use$POSTSEASON <- as.numeric(use$POSTSEASON)
 hist(use$POSTSEASON)
@@ -84,5 +83,3 @@ write.csv(predict, "predictionfile.csv")
 
 predictions <- predict(fit.svm, validate)   ## wm, rf, svm (I think)
 write.csv(predictions, "2025//winner.csv")
-
-## look at 2023//twenty24.R to see what was deleted from below
